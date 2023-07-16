@@ -8,19 +8,22 @@ const useGames = () => {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    gameService
+    const service = gameService();
+
+    service
       .getAll()
       .then((response) => {
         setGames(response.results);
       })
       .catch((error) => {
         if (error instanceof CanceledError) {
+          console.log(error);
           return;
         }
         setError(error.message);
       });
 
-    return gameService.cancel;
+    return () => service.cancel();
   }, []);
 
   return { games, error };

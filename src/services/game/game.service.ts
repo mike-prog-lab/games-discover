@@ -5,11 +5,15 @@ class GameService {
   constructor(private readonly controller: AbortController) {}
 
   public async getAll(): Promise<GamesAllResponse> {
-    return (
+    const response = (
       await apiClient.get<GamesAllResponse>("/games", {
         signal: this.controller.signal,
       })
     ).data;
+
+    console.log(response);
+
+    return response;
   }
 
   public cancel(): void {
@@ -17,4 +21,4 @@ class GameService {
   }
 }
 
-export default new GameService();
+export default () => new GameService(new AbortController());
